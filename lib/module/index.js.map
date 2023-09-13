@@ -1,0 +1,1 @@
+{"version":3,"names":["WalletConnectModal","useWalletConnectModal","IProvider","IProviderMetadata"],"sourceRoot":"../../src","sources":["index.tsx"],"mappings":"AAAA,OAAO,gCAAgC;AACvC,OAAO,oCAAoC;AAC3C,OAAO,sBAAsB;AAC7B,OAAO,qBAAqB;AAE5B,cAAc,eAAe;AAE7B,SAASA,kBAAkB,QAAQ,iCAAiC;AACpE,SAASC,qBAAqB,QAAQ,+BAA+B;AACrE,SAASC,SAAS,EAAEC,iBAAiB,QAAQ,mBAAmB"}

@@ -6,7 +6,7 @@ import type { ClientCtrlState } from '../types/controllerTypes';
 const state = proxy<ClientCtrlState>({
   initialized: false,
   provider: undefined,
-  sessionTopic: undefined,
+  session: undefined,
 });
 
 // -- controller -------------------------------------------------- //
@@ -23,9 +23,9 @@ export const ClientCtrl = {
     state.initialized = initialized;
   },
 
-  setSessionTopic(topic: ClientCtrlState['sessionTopic']) {
-    if (topic && state.provider) {
-      state.sessionTopic = topic;
+  setSession(session: ClientCtrlState['session']) {
+    if (session && state.provider) {
+      state.session = session;
     }
   },
 
@@ -33,11 +33,11 @@ export const ClientCtrl = {
     return state.provider;
   },
 
-  sessionTopic() {
-    return state.sessionTopic;
+  session() {
+    return state.session;
   },
 
   resetSession() {
-    state.sessionTopic = undefined;
+    state.session = undefined;
   },
 };

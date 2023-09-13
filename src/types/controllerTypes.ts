@@ -1,10 +1,11 @@
+import type { SessionTypes } from '@walletconnect/types';
 import type { IProviderMetadata, IProvider, ISessionParams } from './coreTypes';
 
 // -- ClientCtrl ------------------------------------------- //
 export interface ClientCtrlState {
   initialized: boolean;
   provider?: IProvider;
-  sessionTopic?: string;
+  session?: SessionTypes.Struct;
 }
 
 // -- ConfigCtrl ------------------------------------------- //
@@ -37,7 +38,7 @@ export interface AccountCtrlState {
 export interface WcConnectionCtrlState {
   pairingUri: string;
   pairingEnabled: boolean;
-  pairingError: boolean;
+  pairingError: Error | null;
 }
 
 // -- ThemeCtrl --------------------------------------------- //

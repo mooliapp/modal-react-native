@@ -48,7 +48,7 @@ function ConnectingView({ onCopyClipboard }: RouterProps) {
   };
 
   const onRetry = () => {
-    WcConnectionCtrl.setPairingError(false);
+    WcConnectionCtrl.setPairingError(null);
     ExplorerUtil.navigateDeepLink(
       data?.wallet?.mobile.universal,
       data?.wallet?.mobile.native,
@@ -58,13 +58,13 @@ function ConnectingView({ onCopyClipboard }: RouterProps) {
 
   const onAlternativePress = () => {
     if (alternateLink) {
-      WcConnectionCtrl.setPairingError(false);
+      WcConnectionCtrl.setPairingError(null);
       ExplorerUtil.navigateDeepLink(alternateLink, '', pairingUri);
     }
   };
 
   useEffect(() => {
-    WcConnectionCtrl.setPairingError(false);
+    WcConnectionCtrl.setPairingError(null);
   }, []);
 
   return (
@@ -77,7 +77,7 @@ function ConnectingView({ onCopyClipboard }: RouterProps) {
       <View
         style={[styles.walletContainer, { backgroundColor: Theme.background1 }]}
       >
-        <WalletLoadingThumbnail showError={pairingError}>
+        <WalletLoadingThumbnail showError={!!pairingError}>
           <WalletImage url={imageUrl} size="lg" />
         </WalletLoadingThumbnail>
         <Text

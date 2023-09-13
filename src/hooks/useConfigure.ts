@@ -35,8 +35,8 @@ export function useConfigure(config: Props) {
 
   const onSessionDelete = useCallback(
     ({ topic }: { topic: string }) => {
-      const sessionTopic = ClientCtrl.sessionTopic();
-      if (topic === sessionTopic) {
+      const session = ClientCtrl.session();
+      if (session && topic === session.topic) {
         resetApp();
       }
     },
@@ -108,7 +108,7 @@ export function useConfigure(config: Props) {
 
           // Check if there is an active session
           if (provider.session) {
-            ClientCtrl.setSessionTopic(provider.session.topic);
+            ClientCtrl.setSession(provider.session);
             await AccountCtrl.getAccount();
           }
           ClientCtrl.setInitialized(true);

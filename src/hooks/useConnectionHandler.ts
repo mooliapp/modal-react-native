@@ -22,9 +22,9 @@ export function useConnectionHandler() {
   const { sessionParams } = useSnapshot(ConfigCtrl.state);
 
   const onSessionCreated = async (session: SessionTypes.Struct) => {
-    WcConnectionCtrl.setPairingError(false);
+    WcConnectionCtrl.setPairingError(null);
     WcConnectionCtrl.setPairingEnabled(false);
-    ClientCtrl.setSessionTopic(session.topic);
+    ClientCtrl.setSession(session);
     const clearDeepLink = RouterCtrl.state.view === 'Qrcode';
 
     try {
@@ -52,7 +52,7 @@ export function useConnectionHandler() {
       }
     } catch (error) {
       WcConnectionCtrl.setPairingUri('');
-      WcConnectionCtrl.setPairingError(true);
+      WcConnectionCtrl.setPairingError(error as Error);
     }
   }, [isConnected, provider, sessionParams, pairingEnabled]);
 

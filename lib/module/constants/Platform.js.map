@@ -1,0 +1,1 @@
+{"version":3,"names":["Platform","isAndroid","OS","isIOS","PLAYSTORE_REGEX"],"sourceRoot":"../../../src","sources":["constants/Platform.ts"],"mappings":"AAAA,SAASA,QAAQ,QAAQ,cAAc;AAEvC,OAAO,MAAMC,SAAS,GAAGD,QAAQ,CAACE,EAAE,KAAK,SAAS;AAClD,OAAO,MAAMC,KAAK,GAAGH,QAAQ,CAACE,EAAE,KAAK,KAAK;AAE1C,OAAO,MAAME,eAAe,GAC1B,8FAA8F"}
