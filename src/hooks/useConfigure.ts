@@ -1,12 +1,17 @@
 import { useCallback, useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import { useSnapshot } from 'valtio';
 import { SUBSCRIBER_EVENTS } from '@walletconnect/core';
-import { ExplorerCtrl } from '../controllers/ExplorerCtrl';
-import { OptionsCtrl } from '../controllers/OptionsCtrl';
-import { ConfigCtrl } from '../controllers/ConfigCtrl';
-import { ClientCtrl } from '../controllers/ClientCtrl';
-import { AccountCtrl } from '../controllers/AccountCtrl';
-import { WcConnectionCtrl } from '../controllers/WcConnectionCtrl';
+import type UniversalProvider from '@walletconnect/universal-provider';
+
+import {
+  ExplorerCtrl,
+  OptionsCtrl,
+  ConfigCtrl,
+  ClientCtrl,
+  AccountCtrl,
+  WcConnectionCtrl,
+} from '../controllers';
 import type { IProviderMetadata } from '../types/coreTypes';
 import { createUniversalProvider } from '../utils/ProviderUtil';
 import { StorageUtil } from '../utils/StorageUtil';
@@ -25,6 +30,10 @@ interface Props {
 export function useConfigure(config: Props) {
   const colorScheme = useColorScheme();
   const { projectId, providerMetadata, relayUrl } = config;
+
+  const provider = useSnapshot(ClientCtrl.state).provider as
+    | UniversalProvider
+    | undefined;
 
   const resetApp = useCallback(() => {
     ClientCtrl.resetSession();
@@ -93,32 +102,40 @@ export function useConfigure(config: Props) {
   useEffect(() => {
     async function initProvider() {
       try {
-        const provider = await createUniversalProvider({
-          projectId,
-          relayUrl,
-          metadata: providerMetadata,
-        });
-        if (provider) {
-          ClientCtrl.setProvider(provider);
-          provider.on('display_uri', onDisplayUri);
-          provider.client.core.relayer.subscriber.on(
-            SUBSCRIBER_EVENTS.deleted,
-            onSessionDelete
-          );
-
-          // Check if there is an active session
-          if (provider.session) {
-            ClientCtrl.setSession(provider.session);
-            await AccountCtrl.getAccount();
-          }
-          ClientCtrl.setInitialized(true);
+        if (!provider) {
+          const newProvider = await createUniversalProvider({
+            projectId,
+            relayUrl,
+            metadata: providerMetadata,
+          });
+          ClientCtrl.setProvider(newProvider);
+          return;
         }
+
+        provider.on('display_uri', onDisplayUri);
+        provider.client.core.relayer.subscriber.on(
+          SUBSCRIBER_EVENTS.deleted,
+          onSessionDelete
+        );
+
+        // Check if there is an active session
+        if (provider.session) {
+          ClientCtrl.setSession(provider.session);
+          await AccountCtrl.getAccount();
+        }
+        ClientCtrl.setInitialized(true);
       } catch (error) {
         console.error('Error initializing WalletConnect SDK', error);
       }
     }
-    if (!ClientCtrl.provider() && projectId && providerMetadata) {
-      initProvider();
-    }
-  }, [projectId, providerMetadata, relayUrl, onDisplayUri, onSessionDelete]);
+
+    initProvider();
+  }, [
+    provider,
+    projectId,
+    providerMetadata,
+    relayUrl,
+    onDisplayUri,
+    onSessionDelete,
+  ]);
 }

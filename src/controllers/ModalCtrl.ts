@@ -39,8 +39,7 @@ export const ModalCtrl = {
       WcConnectionCtrl.setPairingEnabled(true);
 
       if (isConnected) {
-        // If already connected, do nothing
-        return;
+        // If already connected, do nothing, just let reopen the modal
       } else if (options?.route) {
         RouterCtrl.replace(options.route);
       } else if (explorerDisabled) {
