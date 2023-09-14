@@ -31,9 +31,10 @@ export function useConfigure(config: Props) {
   const colorScheme = useColorScheme();
   const { projectId, providerMetadata, relayUrl } = config;
 
-  const provider = useSnapshot(ClientCtrl.state).provider as
-    | UniversalProvider
-    | undefined;
+  const { isDataLoaded } = useSnapshot(OptionsCtrl.state);
+  const { provider } = useSnapshot(ClientCtrl.state) as {
+    provider: UniversalProvider | undefined;
+  };
 
   const resetApp = useCallback(() => {
     ClientCtrl.resetSession();
@@ -80,12 +81,12 @@ export function useConfigure(config: Props) {
   }, []);
 
   /**
-   * Fetch wallet list
+   * Fetch wallet list if not yet loaded
    */
   useEffect(() => {
     async function fetchWallets() {
       try {
-        if (!ExplorerCtrl.state.wallets.total) {
+        if (!isDataLoaded) {
           await ExplorerCtrl.getWallets();
           OptionsCtrl.setIsDataLoaded(true);
         }
@@ -94,7 +95,7 @@ export function useConfigure(config: Props) {
       }
     }
     fetchWallets();
-  }, []);
+  }, [isDataLoaded]);
 
   /**
    * Initialize provider
